@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Stopwatch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 50px 30px;
+            box-shadow: 0 8px 32px 0 rgba(24, 152, 202, 0.37);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            text-align: center;
+            width: 320px;
+        }
+        
+        .title {
+            color: #0abae6;
+            font-size: 20px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 6px rgba(0, 255, 255, 0.4);
+        }
+        
+        #display {
+            font-size: 42px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        button {
+            flex: 1;
+            font-size: 16px;
+            padding: 12px 0;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 255, 255, 0.6);
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        @media (max-width: 400px) {
+            .container {
+                width: 90%;
+                padding: 30px 20px;
+            }
+            #display {
+                font-size: 32px;
+            }
+            button {
+                font-size: 14px;
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="title">Digital Stopwatch</h2>
+        <div id="display">00:00:00</div>
+        <div class="buttons">
+            <button onclick="start()">Start</button>
+            <button onclick="stop()">Stop</button>
+            <button onclick="reset()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let timer;
+        let startTime;
+        let elapsedTime = 0;
+        let isRunning = false;
+
+        function updateDisplay() {
+            const time = Math.floor(elapsedTime / 1000);
+            const hrs = String(Math.floor(time / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((time % 3600) / 60)).padStart(2, '0');
+            const secs = String(time % 60).padStart(2, '0');
+            document.getElementById('display').textContent = `${hrs}:${mins}:${secs}`;
+        }
+
+        function start() {
+            if (!isRunning) {
+                isRunning = true;
+                startTime = Date.now() - elapsedTime;
+                timer = setInterval(() => {
+                    elapsedTime = Date.now() - startTime;
+                    updateDisplay();
+                }, 250);
+            }
+        }
+
+        function stop() {
+            clearInterval(timer);
+            isRunning = false;
+        }
+
+        function reset() {
+            clearInterval(timer);
+            isRunning = false;
+            elapsedTime = 0;
+            updateDisplay();
+        }
+
+        updateDisplay();
+    </script>
+</body>
+
+</html>
